@@ -92,7 +92,7 @@ fig_decomp.update_layout(
 )
 
 # Exibindo o gráfico no Streamlit, usando a largura total do container
-st.plotly_chart(fig_decomp, width='stretch')
+st.plotly_chart(fig_decomp, use_container_width=True)
 
 st.info("Este gráfico demonstra a contribuição estimada de cada canal de mídia e do baseline (vendas orgânicas) ao longo do tempo. É uma das principais saídas do modelo MMM, permitindo a análise estratégica da performance de cada canal.")
 
@@ -189,7 +189,7 @@ with col_config:
     def limpar_orcamentos():
         for i in range(len(channels_to_sim)):
             st.session_state[f'slider_{i}'] = 0
-    st.button("🗑️ Limpar Orçamentos", on_click=limpar_orcamentos, width='stretch')
+    st.button("🗑️ Limpar Orçamentos", on_click=limpar_orcamentos, use_container_width=True)
 
 
 # --- CÁLCULO E RESULTADOS ---
@@ -220,7 +220,7 @@ with col_resultado:
                 'CPA Marginal (R$)': "R$ {:,.2f}"
             }).background_gradient(cmap='Reds', subset=['Saturação (%)'])
             .background_gradient(cmap='Greens_r', subset=['CPA Marginal (R$)']),
-            width='stretch', hide_index=True
+            use_container_width=True, hide_index=True
         )
         
         st.subheader("Diagnóstico de Oportunidade: Custo da Próxima Venda")
@@ -233,7 +233,7 @@ with col_resultado:
             title='Custo por Aquisição Marginal (CPA Marginal)'
         )
         fig_cpa_m.update_layout(xaxis_title="Custo para Gerar +1 Pedido (R$)", yaxis_title="")
-        st.plotly_chart(fig_cpa_m, width='stretch')
+        st.plotly_chart(fig_cpa_m, use_container_width=True)
         
 st.divider()
 
@@ -331,4 +331,4 @@ fig_decomp_percent.update_layout(
 fig_decomp_percent.update_xaxes(tickangle=45)
 
 # Exibe o gráfico no Streamlit
-st.plotly_chart(fig_decomp_percent, width='stretch')
+st.plotly_chart(fig_decomp_percent, use_container_width=True)
