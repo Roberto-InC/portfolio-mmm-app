@@ -45,18 +45,18 @@ df = load_data()
 # In[3]. TÍTULO E INTRODUÇÃO
 # ==============================================================================
 
-st.title("🚀 Simulador de Otimização de Budget (Marketing Mix Model)")
+st.title("🚀 Budget Optimization Simulator (Marketing Mix Modeling)")
 
 st.markdown("""
-Esta aplicação interativa é uma demonstração do meu trabalho de conclusão de curso do MBA em Data Science & Analytics (USP/ESALQ). 
-O objetivo é transformar os resultados de um complexo Modelo Hierárquico de Marketing Mix (MMM) em uma ferramenta acionável para stakeholders de negócio.
+This interactive application is a demonstration of my MBA thesis in Data Science & Analytics (**USP**). 
+The goal is to transform complex **Marketing Mix Modeling (MMM)** outputs into an actionable tool for business stakeholders.
 """)
 
 # ==============================================================================
 # In[4]. ANÁLISE HISTÓRICA: HISTORICO DE INVESTIMENTO
 # ==============================================================================
 
-st.header("Análise Histórica: Investimento Histórico por Mídia")
+st.header("Historical Analysis: Media Investment Spend")
 
 # Agrupando os dados por mês para criar a visualização
 df_monthly = df.copy()
@@ -78,34 +78,34 @@ fig_decomp = px.bar(
     contribution_monthly, 
     x=contribution_monthly.index, 
     y=contribution_monthly.columns,
-    title="Histórico de Investimento",
-    labels={'x': 'Mês', 'y': 'Total Investido'},
+    title="Investment History",
+    labels={'x': 'Mês', 'y': 'Total Invested'},
     template='plotly_white'
 )
 
 # Melhorando a aparência do gráfico
 fig_decomp.update_layout(
     barmode='stack',
-    legend_title_text='Canais de Mídia',
-    yaxis_title="Volume de Vendas (Simulado)",
-    xaxis_title="Período"
+    legend_title_text='Media Channels',
+    yaxis_title="Sales Volume (Simulated)",
+    xaxis_title="Period"
 )
 
 # Exibindo o gráfico no Streamlit, usando a largura total do container
 st.plotly_chart(fig_decomp, use_container_width=True)
 
-st.info("Este gráfico demonstra a contribuição estimada de cada canal de mídia e do baseline (vendas orgânicas) ao longo do tempo. É uma das principais saídas do modelo MMM, permitindo a análise estratégica da performance de cada canal.")
+st.info("This chart illustrates the estimated contribution of each media channel and the baseline (organic sales) over time. This is a core MMM output for strategic performance analysis.")
 
 # ==============================================================================
 # In[5] SIMULADOR INTERATIVO INTELIGENTE v2.0
 # ==============================================================================
 st.divider()
-st.header("💡 Painel de Controle de Mídia")
-st.markdown("Use as ferramentas abaixo para diagnosticar a saturação e o custo marginal de cada canal.")
+st.header("💡 Media Control Panel")
+st.markdown("Use the tools below to diagnose saturation and marginal costs for each channel.")
 
 # --- DADOS DE REFERÊNCIA E VARIÁVEIS GLOBAIS ---
 ultima_data = df['data'].max()
-st.info(f"Diagnóstico baseado em dados até: **{ultima_data.strftime('%d de %B de %Y')}**")
+st.info(f"Diagnosis based on data up to: **{ultima_data.strftime('%B %d, %Y')}**")
 
 CONTINUOUS_PREDICTORS = ['hill_adstock', 'log_investimento_real', 'log_cliques', 'log_impressoes', 'log_visitas', 'pedidos_lag_1', 'visitas_lag_1']
 
@@ -159,13 +159,13 @@ def simular_metricas_avancadas(channel_name, budget, _model, _best_params, _best
 col_config, col_resultado = st.columns([1, 2])
 
 with col_config:
-    st.subheader("1. Defina o Orçamento Total")
+    st.subheader("1. Set Total Budget")
     # O INPUT DO ORÇAMENTO TOTAL ESTÁ DE VOLTA
     total_budget = st.number_input(
-        "Orçamento Mensal Remanescente (R$)", 10000, 5000000, 500000, 10000, format="%d", key="total_budget_input"
+        "Remaining Monthly Budget (USD)", 10000, 5000000, 500000, 10000, format="%d", key="total_budget_input"
     )
 
-    st.subheader("2. Distribua o Orçamento")
+    st.subheader("2. Budget Allocation")
     channels_to_sim = list(best_params.keys())
     
     budget_simulado = {}
@@ -180,59 +180,59 @@ with col_config:
     unallocated = total_budget - current_allocated
     
     # Exibe o status do orçamento
-    st.metric("Total Alocado nos Sliders", f"R$ {current_allocated:,.0f}")
+    st.metric("Total Allocated in Sliders", f"USD {current_allocated:,.0f}")
     if unallocated < 0:
-        st.error(f"Orçamento Restante: R$ {unallocated:,.0f} (Atenção: excedido!)")
+        st.error(f"Remaining Budget: USD {unallocated:,.0f} (Overspent!)")
     else:
-        st.success(f"Orçamento Restante: R$ {unallocated:,.0f}")
+        st.success(f"Remaining Budget: USD {unallocated:,.0f}")
 
     def limpar_orcamentos():
         for i in range(len(channels_to_sim)):
             st.session_state[f'slider_{i}'] = 0
-    st.button("🗑️ Limpar Orçamentos", on_click=limpar_orcamentos, use_container_width=True)
+    st.button("🗑️ Clean Allocation", on_click=limpar_orcamentos, use_container_width=True)
 
 
 # --- CÁLCULO E RESULTADOS ---
 with col_resultado:
-    st.subheader("3. Diagnóstico e Resultados")
+    st.subheader("3. Diagnosis and Results")
     
     resultados = []
-    with st.spinner('Calculando métricas...'):
+    with st.spinner('Calculating...'):
         for channel, budget in budget_simulado.items():
             saturacao, elasticidade, ret_marginal, cpa_marg = simular_metricas_avancadas(
                 channel, budget, model, best_params, best_lambda, df
             )
             resultados.append({
-                'Canal': channel.replace('_', ' ').title(),
-                'Investimento (R$)': budget,
-                'Saturação (%)': saturacao,
-                'Elasticidade': elasticidade,
-                'Retorno Marginal (Pedidos/R$)': ret_marginal,
-                'CPA Marginal (R$)': cpa_marg
+                'Channel': channel.replace('_', ' ').title(),
+                'Investment (USD)': budget,
+                'Saturation (%)': saturacao,
+                'Elasticity': elasticidade,
+                'Marginal Return (Orders/USD)': ret_marginal,
+                'Marginal CPA (USD)': cpa_marg
             })
 
     if resultados:
-        df_resultados = pd.DataFrame(resultados).sort_values(by='CPA Marginal (R$)', ascending=True)
+        df_resultados = pd.DataFrame(resultados).sort_values(by='Marginal CPA (USD)', ascending=True)
         st.dataframe(
             df_resultados.style.format({
-                'Investimento (R$)': "R$ {:,.0f}", 'Saturação (%)': "{:.1f}%",
-                'Elasticidade': "{:.3f}", 'Retorno Marginal (Pedidos/R$)': "{:.4f}",
-                'CPA Marginal (R$)': "R$ {:,.2f}"
-            }).background_gradient(cmap='Reds', subset=['Saturação (%)'])
-            .background_gradient(cmap='Greens_r', subset=['CPA Marginal (R$)']),
+                'Investment (USD)': "$ {:,.0f}", 'Saturation (%)': "{:.1f}%",
+                'Elasticity': "{:.3f}", 'Marginal Return (Orders/USD)': "{:.4f}",
+                'Marginal CPA (USD)': "$ {:,.2f}"
+            }).background_gradient(cmap='Reds', subset=['Saturation (%)'])
+            .background_gradient(cmap='Greens_r', subset=['Marginal CPA (USD)']),
             use_container_width=True, hide_index=True
         )
         
-        st.subheader("Diagnóstico de Oportunidade: Custo da Próxima Venda")
-        st.info("O CPA Marginal indica **quanto custará para gerar a próxima venda** em cada canal. Canais com menor CPA Marginal são as melhores oportunidades para investimento adicional.")
+        st.subheader("Efficiency Diagnosis: Cost of the Next Sale")
+        st.info("The Marginal CPA indicates **how much it will cost to generate the next sale** for each channel. Channels with a lower Marginal CPA represent the best opportunities for additional investment.")
         
         fig_cpa_m = px.bar(
-            df_resultados.sort_values(by='CPA Marginal (R$)', ascending=False), 
-            y='Canal', x='CPA Marginal (R$)', color='CPA Marginal (R$)',
+            df_resultados.sort_values(by='Marginal CPA (USD)', ascending=False),
+            y='Channel', x='Marginal CPA (USD)', color='Marginal CPA (USD)',
             color_continuous_scale='Greens_r', orientation='h',
-            title='Custo por Aquisição Marginal (CPA Marginal)'
+            title='Marginal Cost per Acquisition (Marginal CPA)'
         )
-        fig_cpa_m.update_layout(xaxis_title="Custo para Gerar +1 Pedido (R$)", yaxis_title="")
+        fig_cpa_m.update_layout(xaxis_title="Cost to Generate +1 Order (USD)", yaxis_title="")
         st.plotly_chart(fig_cpa_m, use_container_width=True)
         
 st.divider()
@@ -240,8 +240,8 @@ st.divider()
 # ==============================================================================
 # In[6] ANÁLISE HISTÓRICA: DECOMPOSIÇÃO CORRETA (BASELINE vs. INCREMENTAL)
 # ==============================================================================
-st.header("📊 Análise Histórica: Decomposição das Vendas")
-st.markdown("Esta análise separa as vendas totais em **Baseline** (vendas orgânicas) e **Incremental** (vendas geradas pelo esforço de cada canal), usando a metodologia de decomposição do modelo.")
+st.header("📊 Historical Sales Decomposition")
+st.markdown("This analysis breaks down total sales into **Baseline** (organic sales) and **Incremental** (sales driven by media effort), using the model's decomposition methodology.")
 
 # --- LÓGICA DE DECOMPOSIÇÃO CORRETA (ADAPTADA DO TCC) ---
 
@@ -316,8 +316,8 @@ fig_decomp_percent = px.bar(
     monthly_decomp_pct,
     x=monthly_decomp_pct.index,
     y=monthly_decomp_pct.columns,
-    title='Decomposição Percentual Mensal de Vendas (Baseline vs. Incremental)',
-    labels={'x': 'Mês', 'value': 'Contribuição Percentual (%)'},
+    title='Monthly Percentage Decomposition (Baseline vs. Incremental)',
+    labels={'x': 'Month', 'value': 'Percentage Contribution (%)'},
     template='plotly_white',
     color_discrete_sequence=px.colors.qualitative.Vivid # Um esquema de cores com bom contraste
 )
@@ -325,8 +325,8 @@ fig_decomp_percent = px.bar(
 fig_decomp_percent.update_layout(
     barmode='stack',
     yaxis_ticksuffix='%',
-    legend_title_text='Componentes',
-    yaxis_title="Contribuição (%)"
+    legend_title_text='Components',
+    yaxis_title="Contribution (%)"
 )
 fig_decomp_percent.update_xaxes(tickangle=45)
 
