@@ -1,7 +1,8 @@
 # 📊 Interactive Data Visualization Dashboard: Marketing Mix Model (MMM)
 **By Roberto Oliveira** | *Lead Data Scientist & Analytics (USP / Actuarial Science)*
 
-Este projeto utiliza técnicas avançadas de **Data Visualization** e **Data Storytelling** para entregar uma solução de inteligência de marketing de alto impacto.
+
+This project utilizes advanced **Data Science**, **Data Visualization** and **Data Storytelling** techniques to deliver a high-impact marketing intelligence solution.
 
 [![Streamlit App](https://static.streamlit.io/badges/streamlit_badge_black_white.svg)](https://portfolio-mmm-app-elruuajuczem76nflclw3u.streamlit.app)
 
@@ -30,9 +31,9 @@ The codebase is structured for scalability and production-grade deployment:
 
 ## 🛠️ Ferramentas & Skills (Tech Stack)
 
-- **Visualização & BI:** Plotly, Streamlit, Data Storytelling, Power BI (Básico), Tableau (Básico), Excel, Dashboards.
+- **Visualization & BI:** Plotly, Streamlit, Data Storytelling, Power BI, Tableau (Basic), Excel, Dashboards.
 - **Data Science & ML:** Python (MixedLM, Scikit-learn, Pandas), Machine Learning (Clustering, Churn), MLOps, SQL.
-- **Infraestrutura:** Docker, GCP Deployment Ready.
+- **Infrastructure:** Docker, GCP Deployment Ready.
 
 
 ### Quick Start
@@ -42,7 +43,7 @@ The codebase is structured for scalability and production-grade deployment:
 
 ## 📊 Interactive Dashboards & Data Storytelling
 
-O dashboard fornece uma visão executiva da atribuição de mídia e cenários de orçamento, facilitando a **tomada de decisão** baseada em dados e a **narrativa** dos resultados de marketing.
+The dashboard provides an executive overview of media attribution and budget scenarios, facilitating data-driven decision-making and the narrative of marketing results.
 
 <table border="0">
  <tr>
